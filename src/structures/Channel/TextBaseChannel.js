@@ -16,7 +16,6 @@ module.exports = class TextBaseChannel extends Channel {
         if (data) this._patch(data);
     }
     
-    /** @private */
     async _patch(data){
         super._patch(data)
         

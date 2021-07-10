@@ -6,11 +6,6 @@ module.exports = class Base_User extends Base {
 
         if(data) this._patch(data)
     }
-    /**
-     * 
-     * @param {Object} data 
-     * @private
-     */
     _patch(data){
         super._patch(data)
         /**

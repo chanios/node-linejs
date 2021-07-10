@@ -7,7 +7,6 @@ module.exports = class Client_User extends Base_User {
         if(data) this._patch(data)
     }
     
-    /** @private */
     async _patch(data){
         super._patch(data)
         if('email' in data) {

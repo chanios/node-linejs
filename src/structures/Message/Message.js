@@ -29,7 +29,6 @@ module.exports = class Message extends Base {
     get content(){
         return this.text
     }
-    /** @private */
     async _patch(data){
         super._patch(data)
         /**

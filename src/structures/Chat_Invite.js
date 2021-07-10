@@ -22,7 +22,6 @@ module.exports = class Chat_Invite extends Base {
         return this.client.user
     }
     
-    /** @private */
     async _patch(data){
         super._patch(data)
         
