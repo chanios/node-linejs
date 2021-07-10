@@ -11,7 +11,7 @@ npm install node-linejs
 ## Examples
 More examples can be found [here](https://github.com/chanios/node-linejs/tree/main/examples/)
 ```js
-const Client = require('node-linejs');
+const { Client } = require('node-linejs');
 const bot = new Client();
 
 bot.on('ready',()=>{console.log('Logged in as ' + bot.user.displayName)})
