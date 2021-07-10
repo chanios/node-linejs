@@ -5,7 +5,7 @@ LINE's selfbot libraries written in NodeJS.
 
 ## Installation
 ```sh
-npm install @chanios/linejs
+npm install node-linejs
 ```
 
 ## Examples
