@@ -13,24 +13,21 @@ const GroupChannelManager = require("../Managers/GroupChannelManager");
 
 const Thrift_Manager = require("./thrift/Thrift_Manager");
 const Chat_InviteManager = require("../Managers/InviteManager");
+
 class Client extends events {
     constructor(options={}){
         super()
-
         if(!options.keepalive) options.keepalive = 1000*50
-
+        if(!options.debug) options.debug = false
         this.options = options
 
+        this.debug = options.debug
         this.token = null;
         this.transport = new Thrift_Manager(this);
         this.users = new UserManager(this)
         this.channels = new ChannelManager(this)
         this.invites = new Chat_InviteManager(this)
         this.groups = new GroupChannelManager(this)
-        /**
-         * @type {import("../structures/User/Client_User")}
-         */
-        this.user;
         this.intervals = [];
 
         this._destroy = false
@@ -42,12 +39,15 @@ class Client extends events {
         return this.transport.api
     }
     async login_qr(){
-        let token = await login_qr()
-        return this.login(token)
+        return (await login_qr()).accessToken
     }
     async login(username,password){
         if (!username && !password) {
-            return login_qr()
+            try {
+                return this.login(await this.login_qr())
+            } catch (error) {
+                throw new Error("LOGIN_QR_FAIL")
+            }
         } else if(username&&!password){//maybe token?
             this.token = username
 
@@ -76,7 +76,8 @@ class Client extends events {
             service: CONSENT.thrift.TalkService
         });
 
-        [this.user] =  await Promise.all([new Client_User(this).fetch(),this.users.fetch(),this.groups.fetch(),this.invites.fetch()])
+        let tasks =  await Promise.all([new Client_User(this).fetch(),this.users.fetch(),this.groups.fetch(),this.invites.fetch()])
+        this.user = tasks[0]
         this.intervals.push(setInterval(() => 
             this.api.sendMessage(0,{
                 _from: this.user.id,
@@ -106,9 +107,10 @@ class Client extends events {
             if(this.localRev>=op.revision) return
             this.localRev = Math.max(op.revision, this.localRev)
             try {
+                this.emit('raw',OpType[op.type],op)
                 require("./actions/"+OpType[op.type])(this, op);
             } catch (error) {
-                console.log(`OP ${OpType[op.type]} Not Found`,op)
+                if(this.debug) console.log(`OP ${OpType[op.type]} Not Found`,op)
             }
         }
     }
@@ -119,5 +121,4 @@ class Client extends events {
         this.intervals.forEach(_=>clearInterval(_))
     }
 }
-
 module.exports = Client

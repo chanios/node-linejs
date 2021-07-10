@@ -34,7 +34,6 @@ const BaseManager = require("./BaseManager");
             },0)).invitedChatMids
         }
         if (!chatMids.length) return;
-        console.log(chatMids)
         return chatMids.map(c=>this.add({
             id: c
         },true,{

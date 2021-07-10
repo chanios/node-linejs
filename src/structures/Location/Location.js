@@ -11,6 +11,7 @@ module.exports = class Location extends Base {
 
         if(data) this._patch(data)
     }
+    /** @private */
     async _patch(data){
         if('title' in data) {
             /**

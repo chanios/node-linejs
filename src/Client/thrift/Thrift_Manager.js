@@ -1,7 +1,6 @@
-const CONSENT = require("../../CONSENT")
 const Thrift_Client = require("./Thrift_Client")
 
-module.exports = class Manager {
+module.exports = class Thrift_Manager {
     
     /**
      * 

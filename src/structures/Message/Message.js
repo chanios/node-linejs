@@ -29,6 +29,7 @@ module.exports = class Message extends Base {
     get content(){
         return this.text
     }
+    /** @private */
     async _patch(data){
         super._patch(data)
         /**
@@ -157,9 +158,6 @@ module.exports = class Message extends Base {
              */
             this.deleted = data.deleted;
         }
-    }
-    async patch(data){
-        if(data.text) this.text = data.text;
     }
     async unsend(){
         let r = await this.client.api.unsendMessage(0,this.id)

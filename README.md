@@ -11,16 +11,15 @@ npm install @chanios/linejs
 ## Examples
 More examples can be found [here](https://github.com/chanios/linejs/tree/main/examples/)
 ```js
-const Client = require('../src/Client/Client');
+const Client = require('@chanios/linejs');
 const bot = new Client();
 
 bot.on('ready',()=>{console.log('Logged in as ' + bot.user.displayName)})
 
-bot.on('message',
-    async(message)=>{
+bot.on('message',(message)=>{
         if(message.author.id == bot.user.id) return;
         if(message.content == 'ping') {
-            await message.channel.send('pong')
+            return message.channel.send('pong')
         }
     }
 )

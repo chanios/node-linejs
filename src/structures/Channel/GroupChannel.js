@@ -19,6 +19,7 @@ module.exports = class GroupChannel extends TextBaseChannel {
         return this.client.users.cache.get(this.extra.groupExtra.creator)
     }
     
+    /** @private */
     _patch(data){
         super._patch(data)
         if('picturePath' in data) {
@@ -67,6 +68,7 @@ module.exports = class GroupChannel extends TextBaseChannel {
      * invite user
      */
     invite(users){
+        if(!Array.isArray(users)) users = [users]
         return this.client.api.inviteIntoChat({
             reqSeq: 0,
             id: this.id,

@@ -13,6 +13,7 @@ module.exports = class Channel extends Base {
         if (data) this._patch(data);
     }
     
+    /** @private */
     async _patch(data){
         super._patch(data)
         /**

@@ -19,7 +19,13 @@ module.exports = class Base_User extends Base {
          */
         this.id = data.mid||data.id;
         
-        
+        if('createdTime' in data) {
+            /**
+             * CreatedTime Of the User
+             * @type {?Date}
+             */
+            this.createdTime = new Date(parseInt(data.createdTime));
+        }
         if('displayName' in data) {
             /**
              * Name Of the User

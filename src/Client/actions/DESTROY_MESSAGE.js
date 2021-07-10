@@ -1,4 +1,3 @@
-const Message = require("../../structures/Message/Message")
 const Client = require("../Client")
 
 /**
@@ -9,12 +8,12 @@ const Client = require("../Client")
 module.exports = async(client, op) =>{
     let channel = client.channels.cache.get(op.param1)
     if (channel && channel.messages) {
-        channel.messages.add({
+        client.emit('message_unsend',await channel.messages.add({
             deleted: true
         },
         true,
         {
             id: op.param2
-        })
+        }))
     }
 }

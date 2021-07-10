@@ -39,7 +39,6 @@ const { ChatType } = CONSENT.thrift.TalkService_types
             name: name,
             ...options
         })).chat
-        console.log(raw)
         return this.add(raw,true,{
             id: raw.chatMid
         })
@@ -61,8 +60,6 @@ const { ChatType } = CONSENT.thrift.TalkService_types
             chatMids,
             withMembers: true
         })).chats
-        console.log(chats)
-        
         chats = chats.map(c=>this.add(c,true,{
             id: c.chatMid
         }))

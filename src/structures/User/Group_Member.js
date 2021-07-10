@@ -22,6 +22,7 @@ module.exports = class Group_Member extends Base {
     get group(){
         return this.client.groups.cache.get(this.groupID)
     }
+    /** @private */
     async _patch(data){
         super._patch(data)
 
