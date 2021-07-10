@@ -26,9 +26,9 @@
     "url": "git+https://github.com/chanios/node-linejs.git"
   },
   "keywords": [
-    "Line",
-    "Linejs",
-    "LineSdk"
+    "line",
+    "linejs",
+    "lineSdk"
   ],
   "bugs": {
     "url": "https://github.com/chanios/node-linejs/issues"
