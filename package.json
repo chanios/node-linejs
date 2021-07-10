@@ -1,7 +1,7 @@
 {
-  "name": "linejs",
+  "name": "@chanios/linejs",
   "version": "1.0.1",
-  "description": "",
+  "description": "LINE's selfbot libraries written in NodeJS.",
   "main": "index.js",
   "dependencies": {
     "@discordjs/collection": "^0.1.6",
@@ -17,5 +17,21 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chelos",
-  "license": "CC-NC"
+  "license": "CC-BY-NC-3.0",
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chanios/linejs.git"
+  },
+  "keywords": [
+    "Line",
+    "Linejs",
+    "LineSdk"
+  ],
+  "bugs": {
+    "url": "https://github.com/chanios/linejs/issues"
+  },
+  "homepage": "https://github.com/chanios/linejs#readme"
 }
