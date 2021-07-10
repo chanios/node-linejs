@@ -13,6 +13,7 @@ const GroupChannelManager = require("../Managers/GroupChannelManager");
 
 const Thrift_Manager = require("./thrift/Thrift_Manager");
 const Chat_InviteManager = require("../Managers/InviteManager");
+const { string_of_enum } = require("../util/Util");
 
 class Client extends events {
     constructor(options={}){
@@ -107,10 +108,11 @@ class Client extends events {
             if(this.localRev>=op.revision) return
             this.localRev = Math.max(op.revision, this.localRev)
             try {
-                this.emit('raw',OpType[op.type],op)
-                require("./actions/"+OpType[op.type])(this, op);
+                let optype = string_of_enum(OpType,op.type)
+                this.emit('raw',optype,op)
+                require("./actions/"+optype)(this, op);
             } catch (error) {
-                if(this.debug) console.log(`OP ${OpType[op.type]} Not Found`,op)
+                if(this.debug) console.log(`OP ${optype} Not Found`,op)
             }
         }
     }

@@ -478,6 +478,10 @@ class Util {
       setTimeout(resolve, ms);
     });
   }
+  static string_of_enum(_enum,value) {
+    for (var k in _enum) if (_enum[k] == value) return k;
+    return null;
+  }
 }
 
 module.exports = Util;

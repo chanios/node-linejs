@@ -1,6 +1,6 @@
 const Base = require("../Base");
 const { ChatType,Extra } = require("../../CONSENT").thrift.TalkService_types
-
+const { string_of_enum } = require("../../util/Util")
 module.exports = class Channel extends Base {
     /**
      * 
@@ -30,9 +30,9 @@ module.exports = class Channel extends Base {
         }
         if('type' in data) {
             /**
-             * @type {?ChatType}
+             * @type {?String}
              */
-            this.type = data.type;
+            this.type = string_of_enum(ChatType,data.type) || this.type;
         }
         if('extra' in data) {
             /**

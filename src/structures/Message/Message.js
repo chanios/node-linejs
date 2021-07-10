@@ -1,4 +1,5 @@
 const { MIDType,ContentType,MessageRelationType,ServiceCode,AppExtensionType } = require("../../CONSENT/gen-nodejs/TalkService_types");
+const { string_of_enum } = require("../../util/Util");
 const Base = require("../Base");
 const Location = require("../Location/Location");
 
@@ -48,7 +49,7 @@ module.exports = class Message extends Base {
             /**
              * @type {?MIDType}
              */
-            this.toType = data.toType;
+            this.toType = string_of_enum(MIDType,data.contentType) || this.toType;
         }
         
         if('createdTime' in data){
@@ -81,9 +82,9 @@ module.exports = class Message extends Base {
 
         if('contentType' in data){
             /**
-             * @type {?ContentType}
+             * @type {?String}
              */
-            this.contentType = data.contentType;
+            this.contentType = string_of_enum(ContentType,data.contentType) || this.contentType;
         }
         if('contentMetadata' in data){
             /**
@@ -117,9 +118,9 @@ module.exports = class Message extends Base {
         }
         if('messageRelationType' in data){
             /**
-             * @type {?MessageRelationType}
+             * @type {?String}
              */
-            this.messageRelationType = data.messageRelationType;
+            this.messageRelationType = string_of_enum(MessageRelationType,data.messageRelationType) || this.messageRelationType;
         }
         if('readCount' in data){
             /**
@@ -131,13 +132,13 @@ module.exports = class Message extends Base {
             /**
              * @type {?ServiceCode}
              */
-            this.relatedMessageServiceCode = data.relatedMessageServiceCode;
+            this.relatedMessageServiceCode = string_of_enum(ServiceCode,data.relatedMessageServiceCode) || this.relatedMessageServiceCode;
         }
         if('appExtensionType' in data){
             /**
              * @type {?AppExtensionType}
              */
-            this.appExtensionType = data.appExtensionType;
+            this.appExtensionType = string_of_enum(AppExtensionType,data.appExtensionType) || this.appExtensionType;
         }
         if('_from' in data){
             /**

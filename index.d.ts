@@ -1,14 +1,11 @@
+import { ChatType, ContactType, MIDType, OpType, ContentType, ServiceCode, AppExtensionType } from "./enum";
 import login_qr from "./src/Client/auth/login_qr";
 import Thrift_Manager from "./src/Client/thrift/Thrift_Manager";
-import ChannelManager from "./src/Managers/ChannelManager";
-import GroupChannelManager from "./src/Managers/GroupChannelManager";
 import Chat_InviteManager from "./src/Managers/InviteManager";
-import UserManager from "./src/Managers/UserManager";
-import GroupChannel from "./src/structures/Channel/GroupChannel";
+import MessageMananger from "./src/Managers/MessageManager";
+import Base from "./src/structures/Base";
 import Chat_Invite from "./src/structures/Chat_Invite";
-import Message from "./src/structures/Message/Message";
-import Client_User from "./src/structures/User/Client_User";
-import User from "./src/structures/User/User";
+import BaseCollection from '@discordjs/collection';
 
 export class Client extends EventEmitter {
     constructor (options: Object): this
@@ -88,9 +85,179 @@ export class Client extends EventEmitter {
 /**
  * Raw Message From Line FetchOps
  */
-    on(event: "raw", listener: (op: String,data: any) => any): this;
+    on(event: "raw", listener: (op: keyof typeof OpType,data: any) => any): this;
 
-    once(event: "raw", listener: (op: String,data: any) => any): this;
+    once(event: "raw", listener: (op: keyof typeof OpType,data: any) => any): this;
 }
 
+export class Base_User extends Base {
+    public id: String;
+    public createdTime: Date;
+    public displayName: ?String;
+    public phoneticName: ?String;
+    public pictureStatus: ?String;
+    public picturePath: ?String;
+    public musicProfile: ?String;
+    public videoProfile: ?String;
+    public avatarProfile: ?any;
+    public statusMessageContentMetadata: ?Object.<string,string>;
+}
+export class User extends Base_User {
+    public channel: TextBaseChannel;
+
+    public type: keyof typeof ContactType;
+    public relation: Object;
+    public pictureStatus: Object;
+    public thumbnailUrl: ?String;
+    public statusMessage: ?String;
+    public displayNameOverridden: Object;
+    public capableVoiceCall: Boolean;
+    public capableVideoCall: Boolean;
+    public capableMyhome: Boolean;
+    public capableBuddy: Boolean;
+    public attributes: any;
+    public settings: any;
+    public recommendParams: String;
+    public friendRequestStatus: String;
+    public phone: ?String;
+}
+export type UserResolvable = User | Base_User | Client_User | String;
+export type TextChannel = GroupChannel | TextBaseChannel
+export class Client_User extends User {
+    public phone: ?String;
+    public email: ?String;
+    public regionCode: ?String;
+}
+export class Group_Member extends Base {
+    public readonly user: User;
+    public readonly joined_date: Date;
+    public readonly group: GroupChannel;
+
+    public id: String;
+    public groupID: ?String;
+    public timestamp: ?Number;
+    /**
+     * Send Message to this user
+     * @param {String} text 
+     * @param {?Object} options 
+     */
+    public send(text, options={}): Message
+    public unblock(): Promise<void>;
+    public block(): Promise<void>;
+}
+
+export class Channel extends Base {
+    public id: String;
+    public notificationDisabled: Boolean;
+    public type: keyof typeof ChatType;
+    public extra: Extra;
+}
+
+export class TextBaseChannel extends Channel {
+    public messages: MessageMananger;
+    public createdTime: Date;
+    public favoriteTimestamp: Date;
+    public chatName: String;
+    public picturePath: ?String;
+    public extra: ?Any;
+    
+    /**
+     * Send Message to this Channel
+     * @param {String} text 
+     * @param {?Object} options 
+     */
+     public send(text, options={}): Message
+}
+export class GroupChannel extends TextBaseChannel {
+    public readonly user: User;
+    public readonly joined_date: Date;
+    public readonly group: GroupChannel;
+
+    public picturePath: String;
+    public extra: {
+        groupExtra: {
+            memberMids: String[]
+        }
+    };
+    public fetch(): Promise<void>;
+    public leave(): Promise<void>;
+    public invite(users: UserResolvable[]): Promise<void>;
+}
+export class Message extends Base {
+    public deleted: Boolean;
+    public readonly author: User;
+    public readonly channel: TextChannel;
+    public readonly content: String;
+
+    public id: String;
+    public text: String;
+    public toType: keyof typeof MIDType;
+    public deliveredTime: Date;
+    public location: Location;
+    public hasContent: Boolean;
+    public contentType: keyof typeof ContentType;
+    public contentMetadata: ?Object.<string,string>;
+    public contentPreview: String;
+    public sessionId: Number;
+    public chunks: ?String[];
+    public relatedMessageId: String;
+    public messageRelationType: ?String[];
+    public readCount: Number;
+    public relatedMessageServiceCode: keyof typeof ServiceCode;
+    public appExtensionType: keyof typeof AppExtensionType;
+    public _from: String;
+    public deleted: Boolean;
+    
+    /**
+     * Unsend Message from channel
+     */
+    public unsend(): Promise<this>;
+}
+
+export type ChannelResolvable = Channel | String;
+
+export abstract class BaseManager {
+    public constructor(client: Client);
+    public readonly client: Client;
+}
+
+export type GroupResolvable = GroupChannel | Group_Member | String;
+  
+export abstract class DataManager<K, Holds, R> extends BaseManager {
+    public constructor(client: Client, holds: Constructable<Holds>);
+    public readonly holds: Constructable<Holds>;
+    public readonly cache: BaseCollection<K, Holds>;
+    public resolve(resolvable: Holds): Holds;
+    public resolve(resolvable: R): Holds | null;
+    public resolveId(resolvable: Holds): K;
+    public resolveId(resolvable: R): K | null;
+    public valueOf(): BaseCollection<K, Holds>;
+}
+
+export abstract class CachedManager<K, Holds, R> extends DataManager<K, Holds, R> {
+    public constructor(client: Client, holds: Constructable<Holds>);
+    private _add(data: unknown, cache?: boolean, { id, extras }?: { id: K; extras: unknown[] }): Holds;
+}
+
+export class ChannelManager extends CachedManager<String, Channel, ChannelResolvable> {
+    public constructor(client: Client, iterable: Iterable<unknown>);
+    public fetch(id: String, options?: {}): Promise<Channel | TextChannel | null>;
+}
+
+export class UserManager extends CachedManager<String, User, UserResolvable> {
+    public constructor(client: Client, iterable: Iterable<unknown>);
+    public fetch(id: String, options?: {}): Promise<User | null>;
+}
+export class GroupChannelManager extends CachedManager<String, GroupChannel, GroupResolvable> {
+    public constructor(client: Client, iterable: Iterable<unknown>);
+    public create(name: String, options?: {
+        picturePath: ?String,
+        targetUserMids: [String],
+        type: keyof typeof ChatType
+       }): Promise<GroupChannel | null>;
+    public fetch(id: String, options?: {}): Promise<GroupChannel | null>;
+}
+export class MessageMananger extends CachedManager<String, Message, MessageResolvable> {
+    public constructor(client: Client, iterable: Iterable<unknown>);
+}
 export { login_qr }

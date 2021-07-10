@@ -12,7 +12,9 @@
     "thrift": "^0.14.2",
     "ws": "^7.5.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\""
   },

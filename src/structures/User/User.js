@@ -1,6 +1,8 @@
+const { ContactType } = require("../../CONSENT").thrift.TalkService_types;
 const TextBaseChannel = require("../Channel/TextBaseChannel");
 const Message = require("../Message/Message");
 const Base_User = require("./Base_User");
+const { string_of_enum } = require("../../util/Util")
 
 module.exports = class User extends Base_User {
     /**
@@ -24,9 +26,9 @@ module.exports = class User extends Base_User {
         if('type' in data) {
             /**
              * Type Of the User
-             * @type {Object}}
+             * @type {String}
              */
-            this.type = data.type;
+            this.type = string_of_enum(ContactType,data.type) || this.type;
         }
         if('relation' in data) {
             /**
@@ -125,13 +127,6 @@ module.exports = class User extends Base_User {
              * @type {?String}
              */
             this.regionCode = data.regionCode;
-        }
-        if('phone' in data) {
-            /**
-             * phone Of the User
-             * @type {?String}
-             */
-            this.phone = data.phone;
         }
     }
     /**

@@ -1,12 +1,5 @@
 
-
 const TalkService_types = require("./gen-nodejs/TalkService_types")
-for (const op in TalkService_types.OpType) {
-    if (Object.hasOwnProperty.call(TalkService_types.OpType, op)) {
-        TalkService_types.OpType[TalkService_types.OpType[op]] = op;
-        
-    }
-}
 
 
 module.exports = {

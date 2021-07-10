@@ -55,7 +55,7 @@ module.exports = class TextBaseChannel extends Channel {
     }
     
     /**
-     * Send Message to this user
+     * Send Message to this channel
      * @param {String} text 
      * @param {?Message} options 
      * @return {Promise<Message>}
