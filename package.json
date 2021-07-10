@@ -1,5 +1,5 @@
 {
-  "name": "@chanios/linejs",
+  "name": "node-linejs",
   "version": "1.0.1",
   "description": "LINE's selfbot libraries written in NodeJS.",
   "main": "index.js",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chanios/linejs.git"
+    "url": "git+https://github.com/chanios/node-linejs.git"
   },
   "keywords": [
     "Line",
@@ -31,7 +31,7 @@
     "LineSdk"
   ],
   "bugs": {
-    "url": "https://github.com/chanios/linejs/issues"
+    "url": "https://github.com/chanios/node-linejs/issues"
   },
-  "homepage": "https://github.com/chanios/linejs#readme"
+  "homepage": "https://github.com/chanios/node-linejs#readme"
 }

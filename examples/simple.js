@@ -1,4 +1,4 @@
-const { Client } = require("@chanios/linejs");
+const { Client } = require("node-linejs");
 const bot = new Client();
 
 bot.on('ready',()=>{
