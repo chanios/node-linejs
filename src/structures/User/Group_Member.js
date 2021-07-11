@@ -25,7 +25,7 @@ module.exports = class Group_Member extends Base {
     async _patch(data){
         super._patch(data)
 
-        if('id' in data ) {
+        if('id' in data) {
             /**
              * ID of the Member
              * @type {String}
@@ -45,6 +45,13 @@ module.exports = class Group_Member extends Base {
              * @type {?Number}
              */
             this.timestamp = parseInt(data.timestamp);
+        }
+        if(this.id) {
+            this.client.users.add({
+                id: this.id
+            },true,{
+                id: this.id
+            })
         }
     }
 }

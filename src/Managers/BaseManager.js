@@ -68,6 +68,7 @@ class BaseManager {
    */
   resolveID(idOrInstance) {
     if (idOrInstance instanceof this.holds) return idOrInstance.id;
+    if (typeof idOrInstance === 'object' && idOrInstance.id) return idOrInstance.id;
     if (typeof idOrInstance === 'string') return idOrInstance;
     return null;
   }

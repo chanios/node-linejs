@@ -139,6 +139,13 @@ export class Client_User extends User {
     public phone: ?String;
     public email: ?String;
     public regionCode: ?String;
+
+    /**
+     * Destroy Client token
+     * @param {String} text 
+     * @param {?Object} options 
+     */
+    public logout(): Promise<void>;
 }
 export class Group_Member extends Base {
     public readonly user: User;

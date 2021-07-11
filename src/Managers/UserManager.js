@@ -1,6 +1,8 @@
 'use strict';
+const Message = require("../structures/Message/Message");
+const Client_User = require("../structures/User/Client_User");
+const Group_Member = require("../structures/User/Group_Member");
 const User = require("../structures/User/User");
-const Collection = require("../util/Collection");
 const BaseManager = require("./BaseManager");
 /**
  * Manages API methods for users and stores their cache.
@@ -24,6 +26,12 @@ const BaseManager = require("./BaseManager");
     }
 
     
+    resolveID(user){
+        if(user instanceof Group_Member) return user.id;
+        if(user instanceof Client_User) return user.id;
+        if(user instanceof Message) return user.user.id;
+        return super.resolveID(user)
+    }
     /**
      * 
      * @param {String} id 

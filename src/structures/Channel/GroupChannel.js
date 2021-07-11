@@ -40,7 +40,6 @@ module.exports = class GroupChannel extends TextBaseChannel {
                         timestamp: data.extra.groupExtra.memberMids[id]
                     })
                 }
-                
             }
         }
         
@@ -71,6 +70,15 @@ module.exports = class GroupChannel extends TextBaseChannel {
         return this.client.api.inviteIntoChat({
             reqSeq: 0,
             id: this.id,
+            targetUserMids: users.map(user=>this.client.users.resolveID(user))
+        })
+    }
+
+    kick(users){
+        if(!Array.isArray(users)) users = [users];
+        return this.client.api.deleteOtherFromChat({
+            reqSeq: 0,
+            chatMid: this.id,
             targetUserMids: users.map(user=>this.client.users.resolveID(user))
         })
     }

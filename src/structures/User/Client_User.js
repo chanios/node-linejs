@@ -37,4 +37,10 @@ module.exports = class Client_User extends User {
         this.client.users.add(this,true,{id:this.id})
         return this
     }
+    async logout(){
+        await this.client.api.logoutSession({
+            tokenKey: this.client.token
+        })
+        return this.client.destroy()
+    }
 }
