@@ -19,17 +19,27 @@ module.exports = class Message extends Base {
 
         if (data) this._patch(data);
     }
+
     get author(){
         return this.client.users.cache.get(this._from)
     }
-    
-    get channel(){
-        return this.client.channels.cache.get(this._from)
+
+    get member(){
+        return this.group.members.cache.get(this._from)
     }
     
+    get channel(){
+        return this.client.channels.cache.get(this.to)
+    }
+
+    get group(){
+        return this.client.groups.cache.get(this.to)
+    }
+
     get content(){
         return this.text
     }
+
     async _patch(data){
         super._patch(data)
         /**

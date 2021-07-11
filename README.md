@@ -17,12 +17,11 @@ const bot = new Client();
 bot.on('ready',()=>{console.log('Logged in as ' + bot.user.displayName)})
 
 bot.on('message',(message)=>{
-        if(message.author.id == bot.user.id) return;
-        if(message.content == 'ping') {
-            return message.channel.send('pong')
-        }
+    if(message.author.id == bot.user.id) return;
+    if(message.content == 'ping') {
+        return message.channel.send('pong')
     }
-)
+})
 
 bot.login()
 ```

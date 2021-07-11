@@ -54,4 +54,10 @@ module.exports = class GroupMember extends Base {
             })
         }
     }
+    /**
+     * Kick This User
+     */
+    kick() {
+        return this.group.kick(this)
+    }
 }

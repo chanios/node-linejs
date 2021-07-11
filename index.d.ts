@@ -154,6 +154,12 @@ export class GroupMember extends Base {
     public id: String;
     public groupID: ?String;
     public timestamp: ?Number;
+    /**
+     * Kick This User
+     * @example
+     * member.kick();
+     */
+    public kick(): Promise<any>;
 }
 
 export class Channel extends Base {
@@ -232,7 +238,9 @@ export class GroupChannel extends TextBaseChannel {
 export class Message extends Base {
     public deleted: Boolean;
     public readonly author: User;
-    public readonly channel: TextChannel;
+    public readonly channel: TextBaseChannel;
+    public readonly group: ?GroupChannel;
+    public readonly member: ?GroupMember;
     public readonly content: String;
 
     public id: String;

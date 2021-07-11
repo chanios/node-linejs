@@ -36,7 +36,7 @@ const BaseManager = require("./BaseManager");
             let users = (await this.client.users.fetch(ids)).map(user=>
                 this.add({
                     id: user.id,
-                    groupID: this.groupID
+                    groupID: this.group.id
                 },true,{
                     id: user.id
                 })

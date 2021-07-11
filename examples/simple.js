@@ -1,13 +1,13 @@
-const { Client } = require("node-linejs");
+const { Client } = require("..");
 const bot = new Client();
 
 bot.on('ready',()=>{
     console.log(`logged as ${bot.user.displayName} ${bot.user.id}`)
     /*
-    bot.users.cache.get('someuserid').send('Heww lo Line (⪴╰╯⪳)')
-    bot.channels.cache.get('somechannelid').send('Heww lo Line (⪴╰╯⪳)')
+        bot.users.cache.get('someuserid').send('Heww lo Line (⪴╰╯⪳)')
+        bot.channels.cache.get('somechannelid').send('Heww lo Line (⪴╰╯⪳)')
+        bot.groups.cache.get('somegroupid').send('Heww lo Line (⪴╰╯⪳)')
     */
-    
 })
 bot.on('message',async(message)=>{
     if(message.author.id == bot.user.id) return;
@@ -20,6 +20,7 @@ bot.on('message_read',(message,user)=>{
 })
 bot.on('chat_invite',invite=>{
     console.log(`channel ${invite.id} invite by ${invite.user.displayName}`)
+    invite.accept()
 })
 bot.on('chat_join',channel=>{
     channel.send('Chat Joined')
