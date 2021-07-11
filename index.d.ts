@@ -124,6 +124,11 @@ export class User extends Base_User {
     public phone: ?String;
     
     /**
+     * Get Avatar Url of the user
+     */
+     public avatarURL(): String
+     
+    /**
      * Send Message to this user
      * @param {String} text 
      * @param {?Object} options 
@@ -202,6 +207,12 @@ export class GroupChannel extends TextBaseChannel {
             memberMids: String[]
         }
     };
+    
+    /**
+     * Get Icon Url of the group
+     */
+     public iconURL(): String
+     
     public fetch(): Promise<void>;
     public leave(): Promise<void>;
     /**

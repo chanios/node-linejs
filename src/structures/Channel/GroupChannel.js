@@ -1,3 +1,4 @@
+const CONSENT = require('../../CONSENT')
 const GroupMemberManager = require("../../Managers/GroupMemberManager");
 const TextBaseChannel = require("./TextBaseChannel");
 
@@ -43,6 +44,9 @@ module.exports = class GroupChannel extends TextBaseChannel {
             }
         }
         
+    }
+    iconURL(){
+        return CONSENT.line_server.CDN_PATH + this.picturePath
     }
     async fetch(){
         let chat = (await this.client.api.getChats({

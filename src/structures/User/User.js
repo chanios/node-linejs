@@ -1,4 +1,5 @@
-const { ContactType } = require("../../CONSENT").thrift.TalkService_types;
+const CONSENT = require('../../CONSENT')
+const { ContactType } = CONSENT.thrift.TalkService_types;
 const Message = require("../Message/Message");
 const Base_User = require("./Base_User");
 const { string_of_enum } = require("../../util/Util")
@@ -121,6 +122,9 @@ module.exports = class User extends Base_User {
              */
             this.regionCode = data.regionCode;
         }
+    }
+    avatarURL(){
+        return CONSENT.line_server.CDN_PATH + this.picturePath
     }
     /**
      * Send Message to this user

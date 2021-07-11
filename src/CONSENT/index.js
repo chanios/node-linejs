@@ -5,6 +5,7 @@ const TalkService_types = require("./gen-nodejs/TalkService_types")
 module.exports = {
     line_server: {
         HOST:"ga2.line.naver.jp",
+        CDN_PATH: "https://obs-sg.line-apps.com",
         SEND_PATH: "/S4",
         RECEIVE_PATH: "/P4"
     },
