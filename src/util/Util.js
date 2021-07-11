@@ -482,6 +482,9 @@ class Util {
     for (var k in _enum) if (_enum[k] == value) return k;
     return null;
   }
+  static escapeRegExp(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  }
 }
 
 module.exports = Util;

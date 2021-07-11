@@ -22,6 +22,16 @@ module.exports = {
         SecondaryQrCodeLoginPermitNoticeService: require("./gen-nodejs/SecondaryQrCodeLoginPermitNoticeService"),
         SecondaryQrCodeLoginPermitNoticeService_types: require("./gen-nodejs/SecondaryQrCodeLoginPermitNoticeService_types")
     },
+    message: {
+        mention: {
+            regex: /<@[a-z0-9]+>/,
+            offset_start: 2,
+            offset_end: 1,
+
+            toString: (id) => `<@${id}>`,
+            replace: () => `@chelos`
+        }
+    },
     headers: {
         "android_lite": {
             "user-agent": "LLA/2.12.0 SKR-H0 9",

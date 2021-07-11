@@ -1,5 +1,6 @@
 const Base = require("../Base");
-const {AvatarProfile} = require("../../CONSENT").thrift.TalkService_types
+const CONSENT = require("../../CONSENT")
+const {AvatarProfile} = CONSENT.thrift.TalkService_types
 module.exports = class Base_User extends Base {
     constructor(client,data){
         super(client)
@@ -83,4 +84,12 @@ module.exports = class Base_User extends Base {
         }
 
     }
+    /**
+     * When concatenated with a string, this automatically returns the user's mention instead of the User object.
+     * @returns {string}
+     */
+    toString() {
+        return CONSENT.message.mention.toString(this.id);
+    }
+
 }

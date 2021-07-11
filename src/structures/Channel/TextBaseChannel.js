@@ -1,4 +1,7 @@
+const CONSENT = require("../../CONSENT");
+const { ContentType } = require("../../CONSENT/gen-nodejs/TalkService_types");
 const MessageMananger = require("../../Managers/MessageManager");
+const { escapeRegExp } = require("../../util/Util");
 const Message = require("../Message/Message");
 const Channel = require("./Channel");
 
@@ -68,8 +71,30 @@ module.exports = class TextBaseChannel extends Channel {
      * @return {Promise<Message>}
      */
      async send(text, options={}){
-        if(!'contentType' in options) option["contentType"] = 0
-        if(!'contentMetadata' in options) option["contentMetadata"] = {}
+        if(!options['contentType']) options["contentType"] = ContentType['NONE']
+        if(!options['contentMetadata']) options['contentMetadata'] = {}
+        text+=""
+        if(text) {
+            let match;
+            while (match = text.match(CONSENT.message.mention.regex)) {
+                if(!options["contentMetadata"]["MENTION"]) options["contentMetadata"]["MENTION"] = {MENTIONEES: []}
+                let start_index = match.index
+                let user_id = match[0].slice(CONSENT.message.mention.offset_start,match[0].length-CONSENT.message.mention.offset_end)
+                
+                let replace_to = CONSENT.message.mention.replace(user_id)
+                text = text.replace(escapeRegExp(match[0]),replace_to)
+                options["contentMetadata"]["MENTION"]["MENTIONEES"].push({'S': (start_index)+"", 'E': (start_index + replace_to.length)+"", 'M': user_id})
+            }
+        }
+        
+        if(options["contentMetadata"]) {
+            for (const k in options["contentMetadata"]) {
+                if(typeof options["contentMetadata"][k] != String) {
+                    if(typeof options["contentMetadata"][k] == "object") options["contentMetadata"][k] = JSON.stringify(options["contentMetadata"][k])
+                    else options["contentMetadata"][k]+=""
+                }
+            }
+        }
 
         let msg = new Message(this.client,{
             _from: this.client.user.id,
