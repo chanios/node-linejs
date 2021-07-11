@@ -176,6 +176,13 @@ export class TextBaseChannel extends Channel {
      * Send Message to this Channel
      * @param {String} text 
      * @param {?Object} options 
+     * @example
+     * // send normal message
+     * channel.send('Hello World')
+     * 
+     * // send message and delete
+     * let msg = await channel.send('delete me')
+     * msg.delete()
      */
      public send(text, options={}): Promise<Message>
 }
@@ -192,7 +199,36 @@ export class GroupChannel extends TextBaseChannel {
     };
     public fetch(): Promise<void>;
     public leave(): Promise<void>;
-    public invite(users: UserResolvable[]): Promise<void>;
+    /**
+     * Invite User To join this Group Channel
+     * @example
+     * // invite with user id
+     * group.invite('userid')
+     * 
+     * // invite with array of user object
+     * let user = client.users.cache.get('userid')
+     * group.invite([user,message.author,user3])
+     * 
+     * // invite with array of mix user object and user id
+     * let user = client.users.cache.get('userid')
+     * group.invite(['userid',user,user2,user3])
+     */
+    public invite(users: UserResolvable[] | String): Promise<void>;
+    /**
+     * Kick User Out of this Group Channel
+     * @example
+     * // kick with user id
+     * group.kick('userid')
+     * 
+     * // kick with array of user object
+     * let user = client.users.cache.get('userid')
+     * group.kick([user,message.author,user3])
+     * 
+     * // kick with array of mix user object and user id
+     * let user = client.users.cache.get('userid')
+     * group.kick(['userid',user,user2,user3])
+     */
+    public kick(users: UserResolvable[] | String): Promise<void>;
 }
 export class Message extends Base {
     public deleted: Boolean;
