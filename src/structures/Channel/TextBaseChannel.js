@@ -33,6 +33,13 @@ module.exports = class TextBaseChannel extends Channel {
             this.favoriteTimestamp = new Date(parseInt(data.favoriteTimestamp));
         }
         
+        if('name' in data) {
+            /**
+             * @type {?String}
+             */
+            this.name = data.name;
+        }
+
         if('chatName' in data) {
             /**
              * @type {?String}

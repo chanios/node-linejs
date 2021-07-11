@@ -5,6 +5,10 @@ module.exports = class Base_User extends Base {
         super(client)
 
         if(data) this._patch(data)
+        
+    }
+    get channel(){
+        return this.client.channels.cache.get(this.id)
     }
     _patch(data){
         super._patch(data)
@@ -71,5 +75,12 @@ module.exports = class Base_User extends Base {
              */
             this.statusMessageContentMetadata = data.statusMessageContentMetadata;
         }
+        
+        if(this.id) {
+            this.client.channels.add(this,true,{
+                id: this.id
+            })
+        }
+
     }
 }

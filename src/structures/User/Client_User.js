@@ -1,6 +1,6 @@
-const Base_User = require("./Base_User");
+const User = require("./User");
 
-module.exports = class Client_User extends Base_User {
+module.exports = class Client_User extends User {
     constructor(client,data){
         super(client,data)
         

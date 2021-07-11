@@ -1,5 +1,4 @@
 const { ContactType } = require("../../CONSENT").thrift.TalkService_types;
-const TextBaseChannel = require("../Channel/TextBaseChannel");
 const Message = require("../Message/Message");
 const Base_User = require("./Base_User");
 const { string_of_enum } = require("../../util/Util")
@@ -13,12 +12,6 @@ module.exports = class User extends Base_User {
     constructor(client,data={}){
         super(client,data)
 
-        this.channel = new TextBaseChannel(client,{
-            id: this.id
-        })
-        this.client.channels.add(this.channel,true,{
-            id: this.id
-        })
         if(data) this._patch(data)
     }
     async _patch(data){
@@ -147,7 +140,7 @@ module.exports = class User extends Base_User {
     /**
      * unblock this user
      */
-     unblock(){
+    unblock(){
         return this.client.api.unblockContact(0,this.id)
     }
 }

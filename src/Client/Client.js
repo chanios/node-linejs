@@ -18,7 +18,7 @@ const { string_of_enum } = require("../util/Util");
 class Client extends events {
     constructor(options={}){
         super()
-        if(!options.keepalive) options.keepalive = 1000*50
+        if(!options.keepalive) options.keepalive = 1000*100
         if(!options.debug) options.debug = false
         this.options = options
 
@@ -79,13 +79,9 @@ class Client extends events {
 
         let tasks =  await Promise.all([new Client_User(this).fetch(),this.users.fetch(),this.groups.fetch(),this.invites.fetch()])
         this.user = tasks[0]
-        this.intervals.push(setInterval(() => 
-            this.api.sendMessage(0,{
-                _from: this.user.id,
-                to: this.user.id,
-                text: 'x'
-            })
-        , this.options.keepalive))
+        this.intervals.push(setInterval(() => {
+            this.user.send('node-linejs(chanios) keepalive')
+        }, this.options.keepalive))
         this.polling()
         this.emit("ready")
     }
