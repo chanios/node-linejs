@@ -1,6 +1,6 @@
 {
   "name": "node-linejs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "LINE's selfbot libraries written in NodeJS.",
   "main": "index.js",
   "dependencies": {
