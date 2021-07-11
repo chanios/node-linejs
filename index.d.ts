@@ -6,9 +6,12 @@ import MessageMananger from "./src/Managers/MessageManager";
 import Base from "./src/structures/Base";
 import Chat_Invite from "./src/structures/Chat_Invite";
 import BaseCollection from '@discordjs/collection';
-
+export type ClientOptions = {
+    keepalive: Number,
+    debug: Boolean
+};
 export class Client extends EventEmitter {
-    constructor (options: Object): this
+    constructor (options: ClientOptions): this
     token: String
 
     user: Client_User
@@ -91,6 +94,8 @@ export class Client extends EventEmitter {
 }
 
 export class Base_User extends Base {
+    public channel: TextBaseChannel;
+
     public id: String;
     public createdTime: Date;
     public displayName: ?String;
@@ -103,8 +108,6 @@ export class Base_User extends Base {
     public statusMessageContentMetadata: ?Object.<string,string>;
 }
 export class User extends Base_User {
-    public channel: TextBaseChannel;
-
     public type: keyof typeof ContactType;
     public relation: Object;
     public pictureStatus: Object;
@@ -120,6 +123,15 @@ export class User extends Base_User {
     public recommendParams: String;
     public friendRequestStatus: String;
     public phone: ?String;
+    
+    /**
+     * Send Message to this user
+     * @param {String} text 
+     * @param {?Object} options 
+     */
+     public send(text, options={}): Promise<Message>
+     public unblock(): Promise<void>;
+     public block(): Promise<void>;
 }
 export type UserResolvable = User | Base_User | Client_User | String;
 export type TextChannel = GroupChannel | TextBaseChannel
@@ -136,14 +148,6 @@ export class Group_Member extends Base {
     public id: String;
     public groupID: ?String;
     public timestamp: ?Number;
-    /**
-     * Send Message to this user
-     * @param {String} text 
-     * @param {?Object} options 
-     */
-    public send(text, options={}): Message
-    public unblock(): Promise<void>;
-    public block(): Promise<void>;
 }
 
 export class Channel extends Base {
@@ -157,7 +161,7 @@ export class TextBaseChannel extends Channel {
     public messages: MessageMananger;
     public createdTime: Date;
     public favoriteTimestamp: Date;
-    public chatName: String;
+    public name: String;
     public picturePath: ?String;
     public extra: ?Any;
     
@@ -166,7 +170,7 @@ export class TextBaseChannel extends Channel {
      * @param {String} text 
      * @param {?Object} options 
      */
-     public send(text, options={}): Message
+     public send(text, options={}): Promise<Message>
 }
 export class GroupChannel extends TextBaseChannel {
     public readonly user: User;
