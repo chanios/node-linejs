@@ -2,7 +2,6 @@ import { ChatType, ContactType, MIDType, OpType, ContentType, ServiceCode, AppEx
 import login_qr from "./src/Client/auth/login_qr";
 import Thrift_Manager from "./src/Client/thrift/Thrift_Manager";
 import Chat_InviteManager from "./src/Managers/InviteManager";
-import MessageMananger from "./src/Managers/MessageManager";
 import Base from "./src/structures/Base";
 import Chat_Invite from "./src/structures/Chat_Invite";
 import BaseCollection from '@discordjs/collection';
@@ -180,9 +179,9 @@ export class TextBaseChannel extends Channel {
      * // send normal message
      * channel.send('Hello World')
      * 
-     * // send message and delete
+     * // send message and unsend
      * let msg = await channel.send('delete me')
-     * msg.delete()
+     * msg.unsend()
      */
      public send(text, options={}): Promise<Message>
 }
@@ -257,6 +256,8 @@ export class Message extends Base {
     
     /**
      * Unsend Message from channel
+     * @example
+     * message.unsend()
      */
     public unsend(): Promise<this>;
 }
