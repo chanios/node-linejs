@@ -103,8 +103,8 @@ class Client extends events {
             }
             if(this.localRev>=op.revision) return
             this.localRev = Math.max(op.revision, this.localRev)
+            let optype = string_of_enum(OpType,op.type)
             try {
-                let optype = string_of_enum(OpType,op.type)
                 this.emit('raw',optype,op)
                 require("./actions/"+optype)(this, op);
             } catch (error) {

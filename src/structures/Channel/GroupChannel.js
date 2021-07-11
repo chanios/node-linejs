@@ -16,7 +16,7 @@ module.exports = class GroupChannel extends TextBaseChannel {
     }
 
     get owner(){
-        return this.client.users.cache.get(this.extra.groupExtra.creator)
+        return this.members.cache.get(this.extra.groupExtra.creator)
     }
     
     _patch(data){

@@ -132,7 +132,7 @@ export class User extends Base_User {
      public unblock(): Promise<void>;
      public block(): Promise<void>;
 }
-export type UserResolvable = User | Base_User | Client_User | String;
+export type UserResolvable = User | GroupMember | Base_User | Client_User | String;
 export type TextChannel = GroupChannel | TextBaseChannel
 export class Client_User extends User {
     public phone: ?String;
@@ -146,7 +146,7 @@ export class Client_User extends User {
      */
     public logout(): Promise<void>;
 }
-export class Group_Member extends Base {
+export class GroupMember extends Base {
     public readonly user: User;
     public readonly joined_date: Date;
     public readonly group: GroupChannel;
@@ -186,9 +186,9 @@ export class TextBaseChannel extends Channel {
      public send(text, options={}): Promise<Message>
 }
 export class GroupChannel extends TextBaseChannel {
-    public readonly user: User;
+    public readonly owner: GroupMember;
     public readonly joined_date: Date;
-    public readonly group: GroupChannel;
+    public readonly members: GroupMemberManager
 
     public picturePath: String;
     public extra: {
@@ -269,7 +269,7 @@ export abstract class BaseManager {
     public readonly client: Client;
 }
 
-export type GroupResolvable = GroupChannel | Group_Member | String;
+export type GroupResolvable = GroupChannel | GroupMember | String;
   
 export abstract class DataManager<K, Holds, R> extends BaseManager {
     public constructor(client: Client, holds: Constructable<Holds>);
@@ -294,18 +294,50 @@ export class ChannelManager extends CachedManager<String, Channel, ChannelResolv
 
 export class UserManager extends CachedManager<String, User, UserResolvable> {
     public constructor(client: Client, iterable: Iterable<unknown>);
-    public fetch(id: String, options?: {}): Promise<User | null>;
+    /**
+     * Fetch Users
+     * @example
+     * //fetch all know user in cache
+     * let users = await client.users.fetch()
+     * 
+     * //find member That Match Name(Chelos)
+     * let user = await users.find(u=>u.user.displayName.match(/Chelos/))
+     * //Send DM to That User
+     * user.send("Hello Chelos")
+     */
+    public fetch(id: UserResolvable[] | String, options?: {}): Promise<User | User[] | null>;
 }
 export class GroupChannelManager extends CachedManager<String, GroupChannel, GroupResolvable> {
     public constructor(client: Client, iterable: Iterable<unknown>);
+    /**
+     * Create New Groups
+     * @example
+     * client.groups.create('new group',{
+     * 
+     * })
+     */
     public create(name: String, options?: {
         picturePath: ?String,
-        targetUserMids: [String],
-        type: keyof typeof ChatType
+        targetUserMids: [UserResolvable]
        }): Promise<GroupChannel | null>;
     public fetch(id: String, options?: {}): Promise<GroupChannel | null>;
 }
 export class MessageMananger extends CachedManager<String, Message, MessageResolvable> {
     public constructor(client: Client, iterable: Iterable<unknown>);
+}
+export class GroupMemberManager extends CachedManager<String, GroupMember, UserResolvable> {
+    public constructor(client: Client, iterable: Iterable<unknown>);
+    
+    /**
+     * Fetch members in Groups
+     * @example
+     * let members = await group.members.fetch()
+     * 
+     * //find member That Match Name(Chelos)
+     * let member = await members.find(member=>member.user.displayName.match(/Chelos/))
+     * //Send DM to That User
+     * member.user.send("Hello Chelos")
+     */
+    public fetch(id: UserResolvable[] | String, options?: {}): Promise<GroupMember | GroupMember[] | null>;
 }
 export { login_qr }

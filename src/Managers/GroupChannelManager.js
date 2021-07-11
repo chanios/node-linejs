@@ -24,16 +24,14 @@ const { ChatType } = CONSENT.thrift.TalkService_types
     }
 
     /**
-     * 
-     * @param {String} name 
-     * @param {{
-     *  picturePath: ?String,
-     *  targetUserMids: [String],
-     *  type: ('group'|'room'|'peer')
-     * }} options 
+     * Create new Group
      */
     async create(name,options={}){
-        options.type = ChatType[options.type.toUpperCase()]
+        options.type = ChatType['GROUP']
+        if(options.targetUserMids) {
+            if(!Array.isArray(options.targetUserMids)) options.targetUserMids = [options.targetUserMids];
+            options.targetUserMids = options.targetUserMids.map(u=>this.client.users.resolveID(u))
+        }
         let raw = (await this.client.api.createChat({
             reqSeq: 0,
             name: name,

@@ -34,17 +34,18 @@ const BaseManager = require("./BaseManager");
     }
     /**
      * 
-     * @param {String} id 
-     * @returns {Promise<User[]>}
+     * @param {String[] | String} ids 
+     * @returns {Promise<User[]|User>}
      */
-    async fetch(id){
-        if(!id){
+    async fetch(ids){
+        if(!ids){
             let all_contacts = await this.client.api.getAllContactIds(0)
-            return await Promise.all(all_contacts.map(id => this.fetch(id)));
+            return await this.fetch(all_contacts)
         }else{
-            if(this.cache.has(id)) return this.cache.get(id)
-            let _ = await this.client.api.getContact(id)
-            return await this.add(_,true,{id:id})
+            if(!Array.isArray(ids)) ids = [ids]
+            let _ = (await this.client.api.getContacts(ids)).map(contact=>this.add(contact,true,{id:contact.mid}))
+            if(_.length <= 1) return _[0];
+            else return _
         }
     }
 }

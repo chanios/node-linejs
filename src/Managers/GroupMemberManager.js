@@ -12,6 +12,7 @@ const BaseManager = require("./BaseManager");
      */
     constructor(group,iterable){
         super(group.client,iterable,GroupMember)
+        this.group = group
         
         /**
          * The cache of this manager
@@ -24,17 +25,23 @@ const BaseManager = require("./BaseManager");
     
     /**
      * 
-     * @param {String} id 
-     * @returns {Promise<User[]>}
+     * @param {String[] | String} ids 
+     * @returns {Promise<GroupMember[]>}
      */
-    async fetch(id){
-        if(!id){
-            let all_contacts = await this.client.api.getAllContactIds(0)
-            return await Promise.all(all_contacts.map(id => this.fetch(id)));
+    async fetch(ids){
+        if(!ids){
+            return await this.fetch(this.cache.keyArray())
         }else{
-            if(this.cache.has(id)) return this.cache.get(id)
-            let _ = await this.client.api.getContact(id)
-            return await this.add(_,true,{id:id})
+            if(!Array.isArray(ids)) ids = [ids]
+            let users = (await this.client.users.fetch(ids)).map(user=>
+                this.add({
+                    id: user.id,
+                    groupID: this.groupID
+                },true,{
+                    id: user.id
+                })
+            )
+            return users
         }
     }
 }

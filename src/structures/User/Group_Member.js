@@ -1,6 +1,6 @@
 const Base = require("../Base");
 
-module.exports = class Group_Member extends Base {
+module.exports = class GroupMember extends Base {
     /**
      * 
      * @param {import("../../Client/Client")} client
