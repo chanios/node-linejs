@@ -9,9 +9,9 @@ module.exports = async(client, op) =>{
     let where = op.param1;
     let executer = op.param2;
 
-    let invite = client.invites.cache.get(where)
-    if(invite) {
-        client.emit("chat_invite_cancel",invite,client.users.cache.get(executer))
-        client.invites.cache.delete(where)
+    let group = client.groups.cache.get(where)
+    if(group) {
+        group.invites.cache.delete(executer)
+        client.emit("chat_invite_accept",group,client.users.cache.get(executer))
     }
 }

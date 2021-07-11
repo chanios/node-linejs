@@ -1,9 +1,7 @@
 import { ChatType, ContactType, MIDType, OpType, ContentType, ServiceCode, AppExtensionType } from "./enum";
 import login_qr from "./src/Client/auth/login_qr";
 import Thrift_Manager from "./src/Client/thrift/Thrift_Manager";
-import Chat_InviteManager from "./src/Managers/InviteManager";
 import Base from "./src/structures/Base";
-import Chat_Invite from "./src/structures/Chat_Invite";
 import BaseCollection from '@discordjs/collection';
 export type ClientOptions = {
     keepalive: Number,
@@ -18,7 +16,6 @@ export class Client extends EventEmitter {
     users: UserManager
     groups: GroupChannelManager
     channels: ChannelManager
-    invites: Chat_InviteManager
 
     transport: Thrift_Manager
     api: Record<string,(...any) => Promise<any>> = {};
@@ -50,16 +47,34 @@ export class Client extends EventEmitter {
 /**
  * When Someone Invite Client
  */
-    on(event: "chat_invite", listener: (invite: Chat_Invite) => any): this;
+    on(event: "chat_invite", listener: (group: GroupChannel,inviter: User) => any): this;
 
-    once(event: "chat_invite", listener: (invite: Chat_Invite) => any): this;
+    once(event: "chat_invite", listener: (group: GroupChannel,inviter: User) => any): this;
+    /**
+     * When Someone Accept Invite
+     */
+     on(event: "chat_invite_accept", listener: (group: GroupChannel,user: User) => any): this;
+
+     once(event: "chat_invite_accept", listener: (group: GroupChannel,user: User) => any): this;
+    /**
+     * When Someone Reject Invite
+     */
+     on(event: "chat_invite_reject", listener: (group: GroupChannel,user: User) => any): this;
+
+     once(event: "chat_invite_reject", listener: (group: GroupChannel,user: User) => any): this;
 /**
  * When Someone Cancel Invite Client
  */
-     on(event: "chat_invite_cancel", listener: (invite: Chat_Invite) => any): this;
+     on(event: "chat_invite_cancel", listener: (group: GroupChannel) => any): this;
 
-     once(event: "chat_invite_cancel", listener: (invite: Chat_Invite) => any): this;
-    
+     once(event: "chat_invite_cancel", listener: (group: GroupChannel) => any): this;
+/**
+ * When Some One Delete other member from group
+ */
+    on(event: "chat_member_remove", listener: (member: GroupMember,deleter: GroupMember) => any): this;
+
+    once(event: "chat_member_remove", listener: (member: GroupMember,deleter: GroupMember) => any): this;
+     
 /**
  * When Client Join Chat
  */
@@ -84,6 +99,12 @@ export class Client extends EventEmitter {
     on(event: "message_read", listener: (message: Message,user: User) => any): this;
 
     once(event: "message_read", listener: (message: Message,user: User) => any): this;
+/**
+ * Raw Message From Line FetchOps
+ */
+    on(event: "call_receive", listener: (channel: TextChannel) => any): this;
+
+    once(event: "call_receive", listener: (channel: TextChannel) => any): this;
 /**
  * Raw Message From Line FetchOps
  */
@@ -159,6 +180,11 @@ export class GroupMember extends Base {
     public id: String;
     public groupID: ?String;
     public timestamp: ?Number;
+    
+    /**
+     * fetch This Member
+     */
+     public fetch(): Promise<GroupMember>;
     /**
      * Kick This User
      * @example
@@ -197,9 +223,12 @@ export class TextBaseChannel extends Channel {
      public send(text, options={}): Promise<Message>
 }
 export class GroupChannel extends TextBaseChannel {
-    public readonly owner: GroupMember;
-    public readonly joined_date: Date;
+    public readonly owner: GroupMember
+    public readonly joined_date: Date
     public readonly members: GroupMemberManager
+    public readonly invites: GroupMemberManager
+    public readonly joined: Boolean
+    public readonly me: GroupMember;
 
     public picturePath: String;
     public extra: {
@@ -245,6 +274,16 @@ export class GroupChannel extends TextBaseChannel {
      * group.kick(['userid',user,user2,user3])
      */
     public kick(users: UserResolvable[] | String): Promise<void>;
+
+    /**
+     * Accept This Group Invite If not Joined
+     */
+     public accept(): Promise<void>;
+        
+    /**
+     * Reject This Group Invite If not Joined
+     */
+     public reject(): Promise<void>;
 }
 export class Message extends Base {
     public deleted: Boolean;

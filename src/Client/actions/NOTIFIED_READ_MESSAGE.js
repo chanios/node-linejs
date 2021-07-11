@@ -11,9 +11,12 @@ module.exports = async(client, op) =>{
     let target = op.param3;
     
     let channel = client.channels.cache.get(where)
-
-    let user = client.users.cache.get(executer)
-    let message = channel.messages.cache.get(target)
-    
-    client.emit("message_read",message, user)
+    if(channel) {
+        let user = client.users.cache.get(executer)
+        let message = channel.messages.cache.get(target)
+        
+        if(message) {
+            client.emit("message_read",message, user)
+        }
+    }
 }

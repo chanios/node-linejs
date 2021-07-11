@@ -22,6 +22,9 @@ const BaseManager = require("./BaseManager");
         this.cache
     }
 
+    add(data, cache = true, options = {}) {
+        return super.add(data, cache, { extras: [this.group],...options });
+    }
     
     /**
      * 
@@ -35,8 +38,7 @@ const BaseManager = require("./BaseManager");
             if(!Array.isArray(ids)) ids = [ids]
             let users = (await this.client.users.fetch(ids)).map(user=>
                 this.add({
-                    id: user.id,
-                    groupID: this.group.id
+                    id: user.id
                 },true,{
                     id: user.id
                 })

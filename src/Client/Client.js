@@ -12,7 +12,6 @@ const UserManager = require("../Managers/UserManager");
 const GroupChannelManager = require("../Managers/GroupChannelManager");
 
 const Thrift_Manager = require("./thrift/Thrift_Manager");
-const Chat_InviteManager = require("../Managers/InviteManager");
 const { string_of_enum } = require("../util/Util");
 
 class Client extends events {
@@ -27,7 +26,6 @@ class Client extends events {
         this.transport = new Thrift_Manager(this);
         this.users = new UserManager(this)
         this.channels = new ChannelManager(this)
-        this.invites = new Chat_InviteManager(this)
         this.groups = new GroupChannelManager(this)
         this.intervals = [];
 
@@ -76,9 +74,8 @@ class Client extends events {
             RECEIVE_PATH: CONSENT.line_server.RECEIVE_PATH,
             service: CONSENT.thrift.TalkService
         });
-
-        let tasks =  await Promise.all([new Client_User(this).fetch(),this.users.fetch(),this.groups.fetch(),this.invites.fetch()])
-        this.user = tasks[0]
+        this.user = await new Client_User(this).fetch()
+        await Promise.all([this.users.fetch(),this.groups.fetch()])
         this.intervals.push(setInterval(() => {
             this.user.send('node-linejs(chanios) keepalive')
         }, this.options.keepalive))

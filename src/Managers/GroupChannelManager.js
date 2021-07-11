@@ -49,14 +49,17 @@ const { ChatType } = CONSENT.thrift.TalkService_types
     async fetch(chatMids){
         if(typeof chatMids == "string") chatMids = [chatMids];
         if(!chatMids) {
-            chatMids = (await this.client.api.getAllChatMids({
+            let allmids = await this.client.api.getAllChatMids({
+                withInvitedChats: true,
                 withMemberChats: true
-            },0)).memberChatMids
+            },0)
+            chatMids = [].concat.apply(allmids.memberChatMids, allmids.invitedChatMids)
         }
         if (!chatMids.length) return;
         let chats = (await this.client.api.getChats({
             chatMids,
-            withMembers: true
+            withMembers: true,
+            withInvitees: true
         })).chats
         chats = chats.map(c=>this.add(c,true,{
             id: c.chatMid

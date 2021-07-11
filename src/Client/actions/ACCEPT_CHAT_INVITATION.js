@@ -7,7 +7,16 @@ const Client = require("../Client")
  */
 module.exports = async(client, op) =>{
     let where = op.param1;
-    let channel = await client.groups.fetch(where)
+    let group = await client.groups.cache.get(where)
     
-    client.emit("chat_join",channel)
+    if(group) {
+        let invite_member = group.invites.cache.get(client.user.id)
+        if(invite_member) {
+            group.members.add(invite_member,true,{
+                id: client.user.id
+            })
+            group.invites.cache.delete(client.user.id)
+        }
+        client.emit("chat_join",group)
+    }
 }

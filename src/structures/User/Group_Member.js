@@ -1,3 +1,4 @@
+const CONSENT = require("../../CONSENT");
 const Base = require("../Base");
 
 module.exports = class GroupMember extends Base {
@@ -6,8 +7,10 @@ module.exports = class GroupMember extends Base {
      * @param {import("../../Client/Client")} client
      * @param {Object} data 
      */
-    constructor(client,data){
+    constructor(client, data, group){
         super(client,data)
+
+        this.group = group
 
         this.client = client
 
@@ -19,9 +22,6 @@ module.exports = class GroupMember extends Base {
     get joined_date(){
         return new Date(this.timestamp)
     }
-    get group(){
-        return this.client.groups.cache.get(this.groupID)
-    }
     async _patch(data){
         super._patch(data)
 
@@ -31,13 +31,6 @@ module.exports = class GroupMember extends Base {
              * @type {String}
              */
             this.id = data.id
-        }
-        if('groupID' in data) {
-            /**
-             * ID of the Group
-             * @type {String}
-             */
-             this.groupID = data.groupID
         }
         if('timestamp' in data) {
             /**
@@ -54,6 +47,18 @@ module.exports = class GroupMember extends Base {
             })
         }
     }
+    async fetch(){
+        await this.client.users.fetch(this.id)
+        return this
+    }
+    /**
+     * When concatenated with a string, this automatically returns the user's mention instead of the User object.
+     * @returns {string}
+     */
+     toString() {
+        return CONSENT.message.mention.toString(this.id);
+    }
+
     /**
      * Kick This User
      */

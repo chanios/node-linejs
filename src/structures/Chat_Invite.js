@@ -39,25 +39,4 @@ module.exports = class Chat_Invite extends Base {
             this.createdTime = new Date(parseInt(data.createdTime));
         }
     }
-    /**
-     * Accept This Invite
-     * @return {Promise<Object>}
-     */
-    async accept(){
-        return await this.client.api.acceptChatInvitation(new AcceptChatInvitationRequest({
-            reqSeq: 0,
-            chatMid: this.id
-        }))
-    }
-    
-    /**
-     * Reject This Invite
-     * @return {Promise<Object>}
-     */
-    async reject(){
-        return await this.client.api.rejectChatInvitation(new RejectChatInvitationRequest({
-            reqSeq: 0,
-            chatMid: this.id
-        }))
-    }
 }

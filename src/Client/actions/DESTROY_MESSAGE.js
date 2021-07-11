@@ -7,13 +7,12 @@ const Client = require("../Client")
  */
 module.exports = async(client, op) =>{
     let channel = client.channels.cache.get(op.param1)
+    let message_id = op.param2
     if (channel && channel.messages) {
-        client.emit('message_unsend',await channel.messages.add({
-            deleted: true
-        },
-        true,
-        {
-            id: op.param2
-        }))
+        let message = channel.messages.cache.get(message_id)
+        if(message) {
+            channel.messages.cache.delete(message_id)
+            client.emit('message_unsend',message)
+        }
     }
 }

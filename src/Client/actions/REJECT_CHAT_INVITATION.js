@@ -1,5 +1,4 @@
 const Client = require("../Client")
-
 /**
  * 
  * @param {Client} client 
@@ -7,10 +6,10 @@ const Client = require("../Client")
  */
 module.exports = async(client, op) =>{
     let where = op.param1;
-    let channel = client.groups.cache.get(where)
     
-    if(channel) {
+    let group = client.groups.cache.get(where)
+    if(group) {
         client.groups.cache.delete(where)
-        client.emit("chat_leave",channel)
+        client.emit("chat_invite_reject",group)
     }
 }

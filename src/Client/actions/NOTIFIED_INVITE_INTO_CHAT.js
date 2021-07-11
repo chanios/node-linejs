@@ -10,13 +10,10 @@ module.exports = async(client, op) =>{
     let target = op.param3;
     
     if(target == client.user.id) {
-        let invite = client.invites.add({
-            id: where,
-            createdTime: op.createdTime
-        },true,{
-            id: where
-        })
-        let inviter = client.users.cache.get(executer)
-        client.emit("chat_invite",invite,inviter)
+        let group = await client.groups.fetch(where)
+        if(group) {
+            let inviter = client.users.cache.get(executer)
+            client.emit("chat_invite",group,inviter)
+        }
     }
 }
