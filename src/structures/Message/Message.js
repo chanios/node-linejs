@@ -29,7 +29,8 @@ module.exports = class Message extends Base {
     }
     
     get channel(){
-        return this.client.channels.cache.get(this.to)
+        if(this.to == this.client.user.id) return this.client.channels.cache.get(this._from)
+        else return this.client.channels.cache.get(this.to)
     }
 
     get group(){

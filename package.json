@@ -1,6 +1,6 @@
 {
   "name": "node-linejs",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "LINE's selfbot libraries written in NodeJS.",
   "main": "index.js",
   "dependencies": {
@@ -10,7 +10,7 @@
     "node-fetch": "^2.6.1",
     "qrcode": "^1.4.4",
     "thrift": "^0.14.2",
-    "ws": "^7.5.2"
+    "ws": "^7.5.3"
   },
   "devDependencies": {
     "typescript": "^4.3.5"
@@ -30,7 +30,8 @@
   "keywords": [
     "line",
     "linejs",
-    "lineSdk"
+    "linesdk",
+    "botsdk"
   ],
   "bugs": {
     "url": "https://github.com/chanios/node-linejs/issues"
