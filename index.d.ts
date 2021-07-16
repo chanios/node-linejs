@@ -99,6 +99,12 @@ export class Client extends EventEmitter {
     on(event: "message_read", listener: (message: Message,user: User) => any): this;
 
     once(event: "message_read", listener: (message: Message,user: User) => any): this;
+    /**
+ * When Message Read By Some User
+ */
+     on(event: "UserUpdate", listener: (oldUser: User,newUser: User) => any): this;
+
+     once(event: "UserUpdate", listener: (oldUser: User,newUser: User) => any): this;
 /**
  * Raw Message From Line FetchOps
  */

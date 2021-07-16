@@ -109,7 +109,7 @@ class Client extends events {
                 this.emit('raw',optype,op)
                 require("./actions/"+optype)(this, op);
             } catch (error) {
-                if(this.debug) console.log(`OP ${optype} Not Found`,op)
+                if(this.debug) console.log(`OP ${optype} Not Found`,error,op)
             }
         }
     }
