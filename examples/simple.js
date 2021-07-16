@@ -18,9 +18,9 @@ bot.on('message',async(message)=>{
 bot.on('message_read',(message,user)=>{
     console.log(`${user.displayName} READ ${message.id} ${message.content}`)
 })
-bot.on('chat_invite',invite=>{
-    console.log(`channel ${invite.id} invite by ${invite.user.displayName}`)
-    invite.accept()
+bot.on('chat_invite',(group,inviter)=>{
+    group.accept()
+    console.log(`group ${group.name}(${group.id}) invite by ${inviter.displayName}`)
 })
 bot.on('chat_join',channel=>{
     channel.send('Chat Joined')

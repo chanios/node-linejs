@@ -21,47 +21,6 @@ module.exports = class TextBaseChannel extends Channel {
     
     async _patch(data){
         super._patch(data)
-        
-        if('createdTime' in data) {
-            /**
-             * @type {?Date}
-             */
-            this.createdTime = new Date(parseInt(data.createdTime));
-        }
-        
-        if('favoriteTimestamp' in data) {
-            /**
-             * @type {?Date}
-             */
-            this.favoriteTimestamp = new Date(parseInt(data.favoriteTimestamp));
-        }
-        
-        if('name' in data) {
-            /**
-             * @type {?String}
-             */
-            this.name = data.name;
-        }
-
-        if('chatName' in data) {
-            /**
-             * @type {?String}
-             */
-            this.name = data.chatName;
-        }
-
-        if('picturePath' in data) {
-            /**
-             * @type {?String}
-             */
-            this.picturePath = data.picturePath;
-        }
-        if('extra' in data) {
-            /**
-             * @type {?any}
-             */
-            this.extra = data.extra;
-        }
     }
     
     /**
@@ -96,14 +55,14 @@ module.exports = class TextBaseChannel extends Channel {
             }
         }
 
-        let msg = new Message(this.client,{
+        let m = await this.client.api.sendMessage(0,{
             _from: this.client.user.id,
             to: this.id,
             text,
             ...options
         })
-        let m = await this.client.api.sendMessage(0,msg)
-        msg._patch(m)
+        let msg = this.messages.add(m,true,{id: m.id})
+        this.client.emit('message', msg)
         return msg
     }
 }

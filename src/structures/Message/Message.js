@@ -9,13 +9,14 @@ module.exports = class Message extends Base {
      * @param {import("../Client")} client 
      * @param {*} data 
      */
-    constructor(client,data){
+    constructor(client,data,channel){
         super(client)
         /**
          * Whether this message has been deleted
          * @type {boolean}
          */
         this.deleted = false;
+        this.channel = channel
 
         if (data) this._patch(data);
     }
@@ -25,16 +26,13 @@ module.exports = class Message extends Base {
     }
 
     get member(){
-        return this.group.members.cache.get(this._from)
+        if(this.toType == "GROUP") return this.group.members.cache.get(this._from)
+        else return
     }
     
-    get channel(){
-        if(this.to == this.client.user.id) return this.client.channels.cache.get(this._from)
-        else return this.client.channels.cache.get(this.to)
-    }
-
     get group(){
-        return this.client.groups.cache.get(this.to)
+        if(this.toType == "GROUP") return this.channel;
+        else return
     }
 
     get content(){
@@ -60,7 +58,7 @@ module.exports = class Message extends Base {
             /**
              * @type {?MIDType}
              */
-            this.toType = string_of_enum(MIDType,data.contentType) || this.toType;
+            this.toType = string_of_enum(MIDType,data.toType) || this.toType;
         }
         
         if('createdTime' in data){

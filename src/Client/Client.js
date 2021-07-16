@@ -77,7 +77,11 @@ class Client extends events {
         this.user = await new Client_User(this).fetch()
         await Promise.all([this.users.fetch(),this.groups.fetch()])
         this.intervals.push(setInterval(() => {
-            this.user.send('node-linejs(chanios) keepalive')
+            this.api.sendMessage(0,{
+                _from: this.user.id,
+                to: this.user.id,
+                text: 'node-linejs(chanios) keepalive'
+            })
         }, this.options.keepalive))
         this.polling()
         this.emit("ready")

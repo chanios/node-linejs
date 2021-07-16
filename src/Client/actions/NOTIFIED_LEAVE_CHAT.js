@@ -12,7 +12,7 @@ module.exports = async(client, op) =>{
     if(group) {
         let member = group.members.cache.get(op.param2)
         if(member) {
-            group.members.cache.delete(op.param2)
+            group.members.cache.delete(param2)
             client.emit("chat_member_remove",member)
         }
     }

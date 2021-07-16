@@ -371,7 +371,7 @@ export class GroupChannelManager extends CachedManager<String, GroupChannel, Gro
      * Create New Groups
      * @example
      * client.groups.create('new group',{
-     * 
+     *  targetUserMids: [member,'userid','userid2']
      * })
      */
     public create(name: String, options?: {

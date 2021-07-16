@@ -1,6 +1,6 @@
 const CONSENT = require('../../CONSENT')
 const GroupMemberManager = require("../../Managers/GroupMemberManager");
-const TextBaseChannel = require("./TextBaseChannel");
+const TextBaseChannel = require('./TextBaseChannel');
 
 module.exports = class GroupChannel extends TextBaseChannel {
     /**
@@ -10,6 +10,7 @@ module.exports = class GroupChannel extends TextBaseChannel {
      */
     constructor(client,data){
         super(client,data)
+
 
         this.members = new GroupMemberManager(this)
         this.invites = new GroupMemberManager(this)

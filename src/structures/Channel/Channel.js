@@ -34,6 +34,41 @@ module.exports = class Channel extends Base {
              */
             this.type = string_of_enum(ChatType,data.type) || this.type;
         }
+        
+        if('createdTime' in data) {
+            /**
+             * @type {?Date}
+             */
+            this.createdTime = new Date(parseInt(data.createdTime));
+        }
+        
+        if('favoriteTimestamp' in data) {
+            /**
+             * @type {?Date}
+             */
+            this.favoriteTimestamp = new Date(parseInt(data.favoriteTimestamp));
+        }
+        
+        if('name' in data) {
+            /**
+             * @type {?String}
+             */
+            this.name = data.name;
+        }
+
+        if('chatName' in data) {
+            /**
+             * @type {?String}
+             */
+            this.name = data.chatName;
+        }
+
+        if('picturePath' in data) {
+            /**
+             * @type {?String}
+             */
+            this.picturePath = data.picturePath;
+        }
         if('extra' in data) {
             /**
              * @type {?Extra}

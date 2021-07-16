@@ -13,7 +13,7 @@ const BaseManager = require("./BaseManager");
     constructor(channel,iterable){
         super(channel.client,iterable,Message)
         
-
+        this.channel = channel
         /**
          * The cache of this manager
          * @type {import("@discordjs/collection").Collection<String, Message>}
@@ -21,5 +21,10 @@ const BaseManager = require("./BaseManager");
          */
         this.cache
     }
+    
+    add(data, cache = true, options = {}) {
+        return super.add(data, cache, { extras: [this.channel],...options });
+    }
+    
 }
 module.exports = MessageMananger
