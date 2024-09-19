@@ -1,5 +1,11 @@
 # LineJS(No E2E Support)
-LINE's selfbot libraries written in NodeJS.
+LINE's selfbot libraries written in NodeJS.  
+
+***
+
+<h3 align="center">Latest Version: <a href="https://github.com/evex-dev/linejs">LINEJS</a> (E2EE Supported) </h1>
+
+***
 
 **Please note that this project is not heavily maintained and some functions are not tested yet.**
 
